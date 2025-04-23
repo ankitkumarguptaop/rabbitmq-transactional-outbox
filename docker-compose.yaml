@@ -49,7 +49,24 @@ services:
       - pgadmin_data:/var/lib/pgadmin
     networks:
       - shared_network
-  
+
+   #rabbitmq
+  rabbitmq:
+    container_name: rabbitmq
+    image: 'rabbitmq:3-management-alpine'
+    restart: always
+    ports:
+      - "${RABBITMQ_FORWARD_PORT:-5672}:5672"
+      - "${RABBITMQ_MANAGEMENT_FORWARD_PORT:-15672}:15672"
+    environment: 
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USERNAME:-guest}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD:-guest}
+      - RABBITMQ_DEFAULT_VHOST=${RABBITMQ_VHOST:-/}
+    volumes:
+        - rabbitmq:/var/lib/rabbitmq/
+        - rabbitmq_logs:/var/log/rabbitmq
+    networks:
+      - shared_network
 
 networks:
   shared_network:
@@ -59,3 +76,5 @@ networks:
 volumes:
   pg_data: {}
   pgadmin_data: {}
+  rabbitmq: {}
+  rabbitmq_logs: {}

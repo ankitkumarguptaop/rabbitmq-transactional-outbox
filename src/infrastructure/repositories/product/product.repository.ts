@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Product } from 'src/domain/product/product.entity';
-import { CreateProductDto } from 'src/features/product/create-product.dto';
+import { CreateProductDto } from 'src/features/product/create-product/create-product.dto';
 
 import { DataSource, Repository } from 'typeorm';
 

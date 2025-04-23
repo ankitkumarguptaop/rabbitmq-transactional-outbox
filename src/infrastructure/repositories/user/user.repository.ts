@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { User } from 'src/domain/user/user.entity';
-import { CreateUserDto } from 'src/features/user/create-user.dto';
-
+import { CreateUserDto } from 'src/features/user/create-user/create-user.dto';
+const jwt = require('jsonwebtoken');
 import { DataSource, Repository } from 'typeorm';
 
 @Injectable()
 export class UserRepository extends Repository<User> {
-  constructor(dataSource: DataSource) {
+  constructor(dataSource: DataSource ,   private configService: ConfigService,) {
     super(User, dataSource.createEntityManager()); // create dataSource entityManager for (which help to db operations for particular entity )
   }
   async createUser(payload: CreateUserDto): Promise<any> {
@@ -30,4 +31,11 @@ export class UserRepository extends Repository<User> {
       },
     });
   }
+  generateToken = (id: number) => {
+    return jwt.sign({ id }, this.configService.get<number>('JWT_SECRET')||"nbvtyv", {
+      expiresIn: '3d',
+    });
+  };
+
+  
 }

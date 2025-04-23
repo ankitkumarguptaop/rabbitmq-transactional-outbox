@@ -1,15 +1,16 @@
-import {
-  MigrationInterface,
-  QueryRunner,
-  Table,
-  TableForeignKey,
-} from 'typeorm';
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class OutboxMessage1745231907311 implements MigrationInterface {
+export class CreateOutboxMessage1745231907311 implements MigrationInterface {
+  name = 'CreateOutboxMessage1745231907311';
+
   public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`
+      CREATE TYPE "public"."outbox_message_status_enum" AS ENUM('SENT', 'PENDING');
+    `);
+
     await queryRunner.createTable(
       new Table({
-        name: 'outbox-message',
+        name: 'outbox_message',
         columns: [
           {
             name: 'id',
@@ -18,35 +19,52 @@ export class OutboxMessage1745231907311 implements MigrationInterface {
           },
           {
             name: 'message_id',
-            type: 'int',
-            isNullable: true,
+            type: 'uuid',
+            isUnique: true,
+            isNullable: false,
           },
           {
             name: 'type',
             type: 'varchar',
+            length: '255',
             isNullable: false,
           },
           {
-            name: 'routing_key',
-            type: 'varchar',
+            name: 'headers',
+            type: 'jsonb',
             isNullable: false,
           },
           {
-            name: 'signature',
-            type: 'varchar',
+            name: 'properties',
+            type: 'jsonb',
             isNullable: false,
           },
           {
-            name: 'message',
-            type: 'varchar',
+            name: 'body',
+            type: 'jsonb',
             isNullable: false,
           },
           {
             name: 'status',
-            type: 'enum',
-            enumName: 'outbox_message_status_enum',
-            enum: ['PENDING', 'SEND'],
+            type: '"public"."outbox_message_status_enum"',
             default: `'PENDING'`,
+            isNullable: false,
+          },
+          {
+            name: 'sent_at',
+            type: 'timestamp',
+            isNullable: true,
+          },
+          {
+            name: 'created_at',
+            type: 'TIMESTAMP',
+            default: 'now()',
+            isNullable: false,
+          },
+          {
+            name: 'updated_at',
+            type: 'timestamp',
+            default: 'now()',
             isNullable: false,
           },
         ],
@@ -54,5 +72,9 @@ export class OutboxMessage1745231907311 implements MigrationInterface {
     );
   }
 
-  public async down(queryRunner: QueryRunner): Promise<void> {}
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.dropTable('outbox_message');
+    await queryRunner.query(`DROP TYPE "public"."outbox_message_status_enum"`);
+  }
 }
+

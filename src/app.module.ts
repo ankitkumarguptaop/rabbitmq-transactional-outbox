@@ -1,13 +1,22 @@
-import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { UserModule } from './features/user/user.module';
-import { ProductModule } from './features/product/product.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { dataSourceOptions } from 'ormconfig';
 import { AuthenticationMiddleware } from './infrastructure/middlewares/auth.middleware';
 import { CqrsModule } from '@nestjs/cqrs';
+import { CreateProductModule } from './features/product/create-product/create-product.module';
+import { CreateUserModule } from './features/user/create-user/create-user.module';
+import { GetProductModule } from './features/product/get-product/get-product.module';
+import { ListProductModule } from './features/product/list-product/list-product.module';
+import { SignInUserModule } from './features/user/signin-user/signin-user.module';
+import { RabbitmqModule } from './infrastructure/message-bus/rabbitmq/config/rabbitmq.module';
 
 @Module({
   imports: [
@@ -18,15 +27,17 @@ import { CqrsModule } from '@nestjs/cqrs';
         dataSourceOptions(configService),
       inject: [ConfigService],
     }),
-    UserModule,
-    ProductModule,
-    CqrsModule
-
-  ], 
+    CreateProductModule,
+    CreateUserModule,
+    GetProductModule,
+    ListProductModule,
+    SignInUserModule,
+    CqrsModule,
+    RabbitmqModule
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
-
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
