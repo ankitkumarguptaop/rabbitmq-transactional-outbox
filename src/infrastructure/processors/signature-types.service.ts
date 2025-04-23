@@ -7,14 +7,15 @@ import { ProductCreatedProcessor } from './product-created/product-created.proce
 
 @Injectable()
 export class SignatureTypes {
-  constructor(private readonly lazyLoader: LazyLoadHandler) {}
+  constructor(private readonly lazyLoader: LazyLoadHandler) {
 
-  public signatureTypes: Record<string, any[]> = {
+  this.signatureTypes = {
     'product-service.product-created': [
       this.lazyLoader.handle(ProductCreatedModule, ProductCreatedProcessor),
     ],
   };
-
+  }
+  public signatureTypes :Record<string, any[]>
   public getSignatureTypes(): Record<string, any[]> {
     return this.signatureTypes;
   }

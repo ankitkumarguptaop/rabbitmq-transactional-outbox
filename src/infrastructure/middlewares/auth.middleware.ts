@@ -28,9 +28,10 @@ export class AuthenticationMiddleware implements NestMiddleware {
 
     try {
       const secret = this.configService.get<string>('JWT_SECRET');
-      const { id } = jwt.verify(token, secret);
+      const {id} :any =  jwt.verify(token, secret);
+      
 
-      const user = await this.userRepository.findOne({ where: { id } });
+   const user = await this.userRepository.findOne({ where: {id:id} });
 
       if (!user) {
         throw new UnauthorizedException('User not found');

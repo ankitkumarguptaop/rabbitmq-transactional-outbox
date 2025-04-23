@@ -11,6 +11,6 @@ export class ProductCreatedHandler {
   async handle(command: ProductCreatedCommand) {
     const {product_id ,name } = command;
 
-    console.log(` product with  id ${product_id} and name ${name} is created ` )
+    console.log(` ==========================product with  id ${product_id} and name ${name} is created n=========================================== ` )
   }
 }

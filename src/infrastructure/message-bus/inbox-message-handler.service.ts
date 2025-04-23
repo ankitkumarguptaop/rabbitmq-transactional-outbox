@@ -19,6 +19,7 @@ export class InboxMessageHandler {
   }
 
   async handleMessage(message: RabbitMQ.Message, max_retry_counts: number) {
+    console.log('✌️message --->', message);
     const messageId = message.properties.messageId;
     const message_type =
       message.properties.type || message.properties.headers.type;
