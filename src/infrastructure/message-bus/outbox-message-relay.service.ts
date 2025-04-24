@@ -20,7 +20,7 @@ export class OutboxMessageRelay {
         return;
       }
 
-      await this.producerService.publishMessages(messages);
+      await this.producerService.publishMessages(messages); // this will call the producer function 
       console.log(`INFO: Published ${messages.length} messages.`);
     } catch (error) {
       console.log('Error in publishing messages ', error);

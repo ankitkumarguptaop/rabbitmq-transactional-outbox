@@ -32,7 +32,7 @@ export class ConsumerService {
     this.channel = this.connection.getChannel();
     await this.channel?.prefetch(limit || this.prefetchLimit);
     await this.rabbitmqConfigurerService.configure();
-    console.log('kndjkfgn')
+    console.log('kndjkfgn');
     await this.startConsuming();
     console.log(`Waiting for messages in ${this.config.primaryQueue}....`);
   }
@@ -52,7 +52,7 @@ export class ConsumerService {
   }
 
   async startConsuming() {
-    console.log("jdjsbcjd")
+    console.log('jdjsbcjd');
     await this.channel.consume(
       this.config.primaryQueue,
       async (message: RabbitMQ.Message) => {

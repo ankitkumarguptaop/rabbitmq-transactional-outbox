@@ -23,22 +23,22 @@ export class ProducerService {
   }
 
   async publishMessages(messages: OutboxMessage[]) {
-    await this.connect();
+    await this.connect(); 
 
-    for (const message of messages) {
-      await this.publisher(message);
+    for (const message of messages) { 
+      await this.publisher(message); // publish message to Queue
     }
 
     await this.close();
   }
 
   private async connect() {
-    await this.connection.connect();
-    await this.rabbitmqConfigurerService.configure();
+    await this.connection.connect(); // connect to rabbit MQ server 
+    await this.rabbitmqConfigurerService.configure(); // implement qeues and exchanges 
   }
 
   private async close() {
-    await this.connection.closeChannel();
+    await this.connection.closeChannel();  
   }
 
   private async publisher(outboxMessage: OutboxMessage) {
@@ -52,7 +52,7 @@ export class ProducerService {
         properties: { ...properties, persistent: true },
       };
 
-      const isPublished = await this.connection.publish(messageToPublish);
+      const isPublished = await this.connection.publish(messageToPublish); // Publish message to Queue 
       if (!isPublished) throw new Error('Message could not be published.');
 
       outboxMessage.markAsSent();

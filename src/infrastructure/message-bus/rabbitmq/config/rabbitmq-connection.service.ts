@@ -30,7 +30,7 @@ export class RabbitmqConnectionService {
     this.timeout = null;
   }
 
-  async connect() {
+  async connect() { // for rabbit mq connection
     try {
       if (this.timeout) clearTimeout(this.timeout);
       this.connection = await this.createConnection();
@@ -39,9 +39,9 @@ export class RabbitmqConnectionService {
       this.connection.on('error', this.handleError.bind(this));
       console.log('RabbitMQ is connected.');
 
-      this.channel = await this.createChannel();
+      this.channel = await this.createChannel(); // this is for craeting channel 
 
-      this.rabbitMqEvents.emit('connected');
+      this.rabbitMqEvents.emit('connected'); // emmit event that this is connected 
       this.reconnectTries = 0;
     } catch (error) {
       console.log(
@@ -51,7 +51,7 @@ export class RabbitmqConnectionService {
     }
   }
 
-  getConnectionConfiguration() {
+  getConnectionConfiguration() { // to get all the configs 
     return this.config;
   }
 
@@ -61,7 +61,7 @@ export class RabbitmqConnectionService {
     });
   }
 
-  async queue(
+  async queue(     // to imlement queue
     exchange: string,
     queue: string,
     options: QueueConfig,
@@ -71,7 +71,7 @@ export class RabbitmqConnectionService {
     await this.channel?.bindQueue(queue, exchange, routingKey);
   }
 
-  async createConnection() {
+  async createConnection() {  // this will actually create connection 
     const connectionString = this.rabbitMQConfigService.getConnectionString();
     const connectionParams = this.rabbitMQConfigService.getConnectionParams();
     return RabbitMQ.connect(connectionString, connectionParams);
@@ -94,7 +94,7 @@ export class RabbitmqConnectionService {
     console.log('Channel closed explicitly.');
   }
 
-  async publish(message: RabbitMQPublishMessage) {
+  async publish(message: RabbitMQPublishMessage) { // For Publishing message
     const { exchange, bindingKey, content, properties } = message;
     return this.channel?.publish(
       exchange,
