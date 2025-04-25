@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ProductRepository } from 'src/infrastructure/repositories/product/product.repository';
 import { CqrsModule } from '@nestjs/cqrs';
-import { ListProductsQuery } from './list-product.query';
+import { ListProductQuery } from './list-product.query';
 import { ListProductController } from './list-product.controller';
+import { listProductHandler } from './list-product.handler';
 
 
 @Module({
@@ -10,7 +11,8 @@ import { ListProductController } from './list-product.controller';
   controllers: [ListProductController],
   providers: [
     ProductRepository,
-    ListProductsQuery,
+    ListProductQuery,
+    listProductHandler
   ],
 })
 export class ListProductModule {}

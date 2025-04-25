@@ -47,7 +47,7 @@ export class ProducerService {
       const properties = outboxMessage.getProperties();
       const messageToPublish: RabbitMQPublishMessage = {
         exchange: this.config.fanoutExchange,
-        bindingKey: '',
+        bindingKey: '', //fanout exchange 
         content: JSON.stringify(message),
         properties: { ...properties, persistent: true },
       };
